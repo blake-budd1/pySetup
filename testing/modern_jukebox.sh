@@ -6,6 +6,9 @@ cd python_scripts
 python3 queue_handling.py
 
 
+# Run the spotify_play script to start playback on the raspberry pi
+python3 spotify_play.py&
+
 # Run the C++ script
 cd ..
 cd sfml_programs

@@ -9,6 +9,7 @@ import os
 
 MJ_URL = "https://the-modern-jukebox-react-app.vercel.app/api/queue"
 POST_URL = "https://the-modern-jukebox-react-app.vercel.app/api/addQueue"
+CURR_URL = "https://the-modern-jukebox-react-app.vercel.app/api/addPlaying"
 CURRENT_PATH = "../temp_files/current_song.txt"
 
 try:
@@ -110,11 +111,16 @@ try:
                         print(post_response.text)
             except requests.exceptions.HTTPError as e:
                 print("Error putting data:", e.response.text)
-
+        
 
         else:
             print(f"Failed to delete the current queue. Status Code: {delete_response.status_code}")
             print(delete_response.text)
+
+        # Post the current playing song to the api/addPlaying
+        curr_play_ur = {"message":current_item}
+        post_response = requests.post(CURR_URL, json=curr_play_ur, headers={'Content-Type': 'application/json'})
+        print("Updated the currently playing song on the front-end.\n")
     else:
         print("Queue is empty. \n")
 
