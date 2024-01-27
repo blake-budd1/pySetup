@@ -24,6 +24,19 @@ std::string getCurrentSongFilePath() {
     return "";
 }
 
+double readSleepDuration() {
+    std::ifstream sleepFile("../temp_files/current_sleep.txt");
+    double sleep_duration = 0.0;
+    if (sleepFile.is_open()) {
+        sleepFile >> sleep_duration;
+        sleepFile.close();
+    } else {
+        std::cerr << "Error opening current_sleep.txt file. Using default sleep duration.\n";
+        sleep_duration = 2.0; // Default sleep duration in seconds
+    }
+    return sleep_duration;
+}
+
 void updateAlbumCover(sf::Texture& album_art, sf::Sprite& albumSprite) {
     std::string album_cov = getCurrentSongFilePath();
     if (!album_cov.empty() && album_art.loadFromFile(album_cov)) {
@@ -54,47 +67,33 @@ int main() {
     sf::Texture album_art;
     sf::Sprite albumSprite;
 
+    sf::Clock clock;
+    double sleep_duration = readSleepDuration();
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
             else if (event.type == sf::Event::Resized) {
-                // Adjust the window and sprite positions on resize
                 window.setSize(sf::Vector2u(event.size.width, event.size.height));
                 jukeBoxDisplay.setPosition(sf::Vector2f(window.getSize().x / 2 - 64, window.getSize().y - 140));
                 albumSprite.setPosition(sf::Vector2f(window.getSize().x / 2 - 64, window.getSize().y - 140));
             }
         }
 
-        // Update album cover and related information
-        updateAlbumCover(album_art, albumSprite);
+        // Check if it's time to update the album cover
+        if (clock.getElapsedTime().asSeconds() >= sleep_duration) {
+            updateAlbumCover(album_art, albumSprite);
+            clock.restart();
+            sleep_duration = readSleepDuration(); // Read the sleep duration again
+        }
 
         window.clear();
         window.draw(jukeBoxDisplay);
         window.draw(album_cover);
         window.draw(albumSprite);
         window.display();
-
-        // Read the sleep duration from the file
-        std::ifstream sleepFile("../temp_files/current_sleep.txt");
-        double sleep_duration = 0.0;
-        if (sleepFile.is_open()) {
-            sleepFile >> sleep_duration;
-            sleepFile.close();
-        } else {
-            std::cerr << "Error opening current_sleep.txt file. Using default sleep duration.\n";
-            sleep_duration = 2.0; // Default sleep duration in seconds
-        }
-
-        // Ensure sleep duration is non-negative
-        if (sleep_duration >= 0) {
-            std::cout << "Sleeping for " << sleep_duration << " seconds...\n";
-            std::this_thread::sleep_for(std::chrono::duration<double>(sleep_duration));
-        } else {
-            std::cerr << "Invalid sleep duration: " << sleep_duration << "\n";
-            break;
-        }
     }
 
     return 0;
