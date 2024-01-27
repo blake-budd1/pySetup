@@ -30,6 +30,7 @@ double readSleepDuration() {
     if (sleepFile.is_open()) {
         sleepFile >> sleep_duration;
         sleepFile.close();
+        std::cout << "sleep duration is: " << sleep_duration << std::endl;
     } else {
         std::cerr << "Error opening current_sleep.txt file. Using default sleep duration.\n";
         sleep_duration = 2.0; // Default sleep duration in seconds
@@ -63,10 +64,14 @@ int main() {
     sf::Sprite jukeBoxDisplay;
     jukeBoxDisplay.setTexture(juke_box);
     jukeBoxDisplay.setScale(sf::Vector2f(0.2, 0.2));
-
+    sf::Vector2u size = juke_box.getSize();
+    size.x *= 0.2;
+    size.y *= 0.2; // these get scaled later to 2
+    int x = sf::VideoMode::getDesktopMode().width / 2 - (size.x/2);
+    int y = sf::VideoMode::getDesktopMode().height - size.y;
     sf::Texture album_art;
     sf::Sprite albumSprite;
-
+    updateAlbumCover(album_art, albumSprite);
     sf::Clock clock;
     double sleep_duration = readSleepDuration();
 
@@ -77,8 +82,8 @@ int main() {
                 window.close();
             else if (event.type == sf::Event::Resized) {
                 window.setSize(sf::Vector2u(event.size.width, event.size.height));
-                jukeBoxDisplay.setPosition(sf::Vector2f(window.getSize().x / 2 - 64, window.getSize().y - 140));
-                albumSprite.setPosition(sf::Vector2f(window.getSize().x / 2 - 64, window.getSize().y - 140));
+                jukeBoxDisplay.setPosition(sf::Vector2f(x,y));
+                albumSprite.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width/2 - 64, y+64));
             }
         }
 
