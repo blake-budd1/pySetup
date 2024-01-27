@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
+#include <vector>
 
 
 // Need a function that can read in the second line of the current_song.txt to the location of the image 
@@ -27,6 +28,37 @@ std::string getCurrentSongFilePath(){
     return line;
 }
 
+std::vector<std::string> getPreviousSongFilePath()
+{
+    std::string temp; // temp filepath for previous images (loops)
+    std::vector<std::string> previousSongsImages;
+    std::ifstream file("../temp_files/previous_songs.txt");
+    if(!file.is_open()) // if this does not open, we are on the first song and there are no previous songs 
+    {
+        std::cout << "No previous song data available. \n";
+    }   
+    std::string line;
+    bool readNextLine = false;
+    while(std::getline(file, line))
+    {
+        if(readNextLine){
+            previousSongsImages.push_back(line);
+            std::cout << "Previous song url: " << line;
+            readNextLine = false;
+        }
+        else
+        {
+            readNextLine = true;
+        }
+    }
+    file.close();
+    std::cout << "printing previous song data in function: \n";
+    for(int i = 0 ; i < previousSongsImages.size(); i++) 
+    {
+        std::cout << "previous songs [" << i << "] = " << previousSongsImages[i];
+    }
+    return previousSongsImages;
+}
 
 int main()
 {
@@ -63,6 +95,12 @@ int main()
     std::cout << "size of the image: " << size.x << " | " << size.y << "\n";
     int x = sf::VideoMode::getDesktopMode().width / 2 - (size.x/2);
     int y = sf::VideoMode::getDesktopMode().height - size.y;
+
+
+    // Handle getting all the images from the previous_songs.txt file if it exists
+    std::vector<std::string> previousSongs = getPreviousSongFilePath();
+    std::cout << "previousSongs.size() = " << previousSongs.size() << "\n";
+
     
     while (window.isOpen())
     {

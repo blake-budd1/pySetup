@@ -11,6 +11,7 @@ MJ_URL = "https://the-modern-jukebox-react-app.vercel.app/api/queue"
 POST_URL = "https://the-modern-jukebox-react-app.vercel.app/api/addQueue"
 CURR_URL = "https://the-modern-jukebox-react-app.vercel.app/api/addPlaying"
 CURRENT_PATH = "../temp_files/current_song.txt"
+CURRENT_SLEEP_PATH = "../temp_files/current_sleep.txt"
 
 try:
     # get the queue stored at MJ_URL
@@ -59,7 +60,11 @@ try:
             file.write(track_cover + "\n")
             file.write(str(duration_ms) + "\n")
             file.write(str(duration_sec) + "\n")        
-
+        with open(CURRENT_SLEEP_PATH, "w") as file:
+            pass
+            print("Cleared the current duration of song\n")
+        with open(CURRENT_SLEEP_PATH, "w") as file:
+            file.write(str(duration_sec))
 
     if data:
         # print the current data

@@ -5,7 +5,6 @@ echo "Running python script to update queue"
 cd python_scripts
 python3 queue_handling.py
 
-
 # Run the spotify_play script to start playback on the raspberry pi
 python3 spotify_play.py&
 
