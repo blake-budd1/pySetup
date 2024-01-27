@@ -28,7 +28,6 @@ void updateAlbumCover(sf::Texture& album_art, sf::Sprite& albumSprite) {
     std::string album_cov = getCurrentSongFilePath();
     if (!album_cov.empty() && album_art.loadFromFile(album_cov)) {
         albumSprite.setTexture(album_art);
-        albumSprite.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width / 2 - 64, sf::VideoMode::getDesktopMode().height - 140));
         albumSprite.setScale(sf::Vector2f(0.2, 0.2));
     } else {
         std::cerr << "Cannot load album cover.\n";
@@ -37,6 +36,8 @@ void updateAlbumCover(sf::Texture& album_art, sf::Sprite& albumSprite) {
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width + 100, sf::VideoMode::getDesktopMode().height), "SFML works!");
+    window.setFramerateLimit(60); // Limit frame rate
+
     sf::RectangleShape album_cover(sf::Vector2f(140.f, 140.f));
     album_cover.setFillColor(sf::Color::Black);
 
@@ -48,7 +49,6 @@ int main() {
 
     sf::Sprite jukeBoxDisplay;
     jukeBoxDisplay.setTexture(juke_box);
-    jukeBoxDisplay.setPosition(sf::Vector2f(sf::VideoMode::getDesktopMode().width / 2 - 64, sf::VideoMode::getDesktopMode().height - 140));
     jukeBoxDisplay.setScale(sf::Vector2f(0.2, 0.2));
 
     sf::Texture album_art;
@@ -59,6 +59,12 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+            else if (event.type == sf::Event::Resized) {
+                // Adjust the window and sprite positions on resize
+                window.setSize(sf::Vector2u(event.size.width, event.size.height));
+                jukeBoxDisplay.setPosition(sf::Vector2f(window.getSize().x / 2 - 64, window.getSize().y - 140));
+                albumSprite.setPosition(sf::Vector2f(window.getSize().x / 2 - 64, window.getSize().y - 140));
+            }
         }
 
         // Update album cover and related information
