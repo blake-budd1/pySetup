@@ -62,7 +62,7 @@ std::vector<std::string> getPreviousSongFilePath()
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width + 100, sf::VideoMode::getDesktopMode().height), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "SFML works!");
     sf::CircleShape shape(100.f);
 
     // rectangle to hold album cover in:
