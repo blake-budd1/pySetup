@@ -60,7 +60,7 @@ while True:  # Infinite loop for continuous execution
                 print(line.strip())
 
         # Sleep for the song duration (so the whole song plays)
-        sleep(float(lines[7]) - 10)
+        # sleep(float(lines[7]) - 10)
 
         # Need to remove the current song from the current_song.txt
         # need to write the first two objects (uri and image (stored on py)) into the previous_songs.txt file

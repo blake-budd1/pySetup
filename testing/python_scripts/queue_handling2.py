@@ -113,5 +113,5 @@ while True:
     data = get_current_song()
     update_album_cover(data)
     sleep_duration = float(open(CURRENT_SLEEP_PATH, "r").read().strip())
-    print("sleeping for : " + str(sleep_duration + 5)+ "\n")
-    sleep(sleep_duration - 1)
+    print("sleeping for : " + str(sleep_duration - 5)+ "\n")
+    sleep(sleep_duration - 5)

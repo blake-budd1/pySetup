@@ -1,2 +1,2 @@
-spotify:track:68mOSKT4uBkKddEAhlMO61
-/home/blake/Desktop/testing/album_covers/ab67616d0000b27316d1ca78222a4fb506a82211.JPEG
+spotify:track:3eP13S8D5m2cweMEg3ZDed
+/home/blake/Desktop/testing/album_covers/ab67616d0000b2737d384516b23347e92a587ed1.JPEG
