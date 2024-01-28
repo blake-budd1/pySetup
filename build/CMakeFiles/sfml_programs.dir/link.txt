@@ -1,0 +1,1 @@
+/usr/bin/aarch64-linux-gnu-g++ -g -rdynamic CMakeFiles/sfml_programs.dir/main.cpp.o -o sfml_programs 

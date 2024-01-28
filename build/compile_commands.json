@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/alexacole/Documents/pySetup/build",
+  "command": "/usr/bin/aarch64-linux-gnu-g++   -g -o CMakeFiles/sfml_programs.dir/main.cpp.o -c /home/alexacole/Documents/pySetup/main.cpp",
+  "file": "/home/alexacole/Documents/pySetup/main.cpp"
+}
+]

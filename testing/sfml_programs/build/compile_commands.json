@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/alexacole/Documents/pySetup/testing/sfml_programs/build",
+  "command": "/usr/bin/aarch64-linux-gnu-g++  -isystem /usr/include/opencv4 -g -o CMakeFiles/sfml_programs.dir/main.cpp.o -c /home/alexacole/Documents/pySetup/testing/sfml_programs/main.cpp",
+  "file": "/home/alexacole/Documents/pySetup/testing/sfml_programs/main.cpp"
+},
+{
+  "directory": "/home/alexacole/Documents/pySetup/testing/sfml_programs/build",
+  "command": "/usr/bin/aarch64-linux-gnu-g++  -isystem /usr/include/opencv4 -g -o CMakeFiles/sfml_programs.dir/opencv.cpp.o -c /home/alexacole/Documents/pySetup/testing/sfml_programs/opencv.cpp",
+  "file": "/home/alexacole/Documents/pySetup/testing/sfml_programs/opencv.cpp"
+}
+]
