@@ -1,10 +1,10 @@
-chmod modern_jukebox3.sh
-/modern_jukebox3.sh
+chmod +x modern_jukebox_v3.sh
+./modern_jukebox_v3.sh
 
 This will run the scripts and allow for all three scripts to work at the same time to display the song using sfml, get the current song from queue, and start the playback on the raspberry pi device. 
 
-TODO: in queue: if the queue is empty then empty the current_song.txt
+TODO: 
+  - post the control to the front end if pause or play
+  - poll the front end api/control to get the front end controller and place into remote.txt file
 
 
-have both pi scripts poll file that says either next or previous, when one or the other, do that. 
-If neither of those, scripts don't run. i.e.) still playing or paused. 
