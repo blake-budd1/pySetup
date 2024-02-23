@@ -1,3 +1,11 @@
 right
 left
 select
+play
+pause
+next
+previous
+play
+pause
+next
+previous
