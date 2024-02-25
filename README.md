@@ -20,3 +20,9 @@ The Modern Jukebox
 -     Welcomes the user to The Modern Jukebox and prompts the user to change the playback device to the 'Raspodify'
 -   main_v3.cpp
 -     UI that handles current, next, and previous songs.
+
+To Run the script:
+ - Give privledges to the bash script using
+ - chmod +x modern_jukebox_v3.sh
+ - Then run the command using:
+ - ./modern_jukebox_v3.sh
