@@ -35,47 +35,31 @@ do
             if [ "$strid" != "$strlastid" ]; then
                 case "$strkey" in
                     "up")
-                        intpixels=$((-1 * intmousespeed))
-                        xdotool mousemove_relative -- 0 $intpixels #move mouse up
-                        intmousespeed=$((intmousespeed + intmouseacc)) #speed up
                         echo Key Pressed: up
                         ;;
                     "down")
-                        intpixels=$(( 1 * intmousespeed))
-                        xdotool mousemove_relative -- 0 $intpixels #move mouse down
-                        intmousespeed=$((intmousespeed + intmouseacc)) #speed up
                         echo Key Pressed: down
                         ;;
                     "left")
-                        intpixels=$((-1 * intmousespeed))
-                        xdotool mousemove_relative -- $intpixels 0 #move mouse left
-                        intmousespeed=$((intmousespeed + intmouseacc)) #speed up
-                        printf "left\n" >> remote.txt
+                        printf "previous\n" >> remote.txt
                         ;;
                     "right")
-                        intpixels=$(( 1 * intmousespeed))
-                        xdotool mousemove_relative -- $intpixels 0 #move mouse right
-                        intmousespeed=$((intmousespeed + intmouseacc)) #speed up
-                        printf "right\n" >> remote.txt
+                        printf "next\n" >> remote.txt
                         ;;
                     "select")
-                        xdotool click 1 #left mouse button click
                         printf "select\n" >> remote.txt
-                        ;;
-                    "return")
-                        xdotool key "Alt_L+Left" #WWW-Back
                         ;;
                     "exit")
                         echo Key Pressed: EXIT
                         ;;
                     "rewind")
-                        printf "rewind\n" >> remote.txt
+                        printf "previous\n" >> remote.txt
                         ;;
                     "pause")
                         printf "pause\n" >> remote.txt
                         ;;
                     "Fast forward")
-                        printf "fast forward\n" >> remote.txt
+                        printf "next\n" >> remote.txt
                         ;;
                     "play")
                         printf "play\n" >> remote.txt
