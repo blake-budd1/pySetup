@@ -11,6 +11,7 @@ import re
 import os
 
 MJ_URL = "http://the-modern-jukebox-react-app.vercel.app/api/queue"
+CONTROL_URL = "http://the-modern-jukebox-react-app.vercel.app/api/controls"
 DEVICE_ID = "98bb0735e28656bac098d927d410c3138a4b5bca"
 CLIENT_ID = "62d7db029474470d9910002d8e2c71fa"
 CLIENT_SECRET = "62d6fbba1a794b55a5be7e83216ddc5f"
@@ -25,22 +26,40 @@ def readController():
     command = ""
     with open(CONTROLLER_PATH, "r") as controller_file:
             controller = controller_file.readlines()
-            if(controller):
-                command = controller[0].strip()
-                with open(CONTROLLER_PATH, 'w') as controller_file:
-                    controller_file.writelines((controller[1:]))
-                print("controller = ", command)
+            controller_file.close()
+    if(controller):
+        command = controller[0].strip()
+        with open(CONTROLLER_PATH, 'w') as controller_file:
+            controller_file.writelines((controller[1:]))
+            controller_file.close()
+        print("controller = ", command)
     return command
 
 def writeToSystemController(command, file_path):
     # Clear the system controller
     with open(file_path,"w") as file:
         file.truncate(0)
+        file.close()
     # Write the new command to the system controller
     with open(file_path, "w") as file:
         file.write(command)
+        file.close()
     print("wrote: ", command, "to system controller")
 
+
+# This is used to update the controls on the front end to match anything that 
+    # might have happened with buttons or remote controls
+def postControlToWebsite(command):
+    # curr_play_ur = {"message": data[0]}
+    # post_response = requests.post(CURR_URL, json=curr_play_ur, headers={'Content-Type': 'application/json'})
+    # post_response.raise_for_status()
+    controls = {"play": False, "pause": False, "next": False, "previous": False }
+    if(command == "pause"):
+        controls = {"play": False, "pause": True, "next": False, "previous": False }
+    elif (command == "play"):
+        controls = {"play": True, "pause": False, "next": False, "previous": False }
+
+    response = requests.post(CONTROL_URL, json = controls)
 
 
 def updateFiles(lines):
@@ -81,26 +100,30 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
 # Force a transfer device to playback on the raspberry pi from Spotify
 print("transferring device")
 sp.transfer_playback(device_id=DEVICE_ID, force_play=False)
-
+sleep(15)
 while True:  # Infinite loop for continuous execution
-    try:
-        # Read the sleep duration from the file
-        with open(CURRENT_SLEEP_PATH, "r") as sleep_file:
-            sleep_duration = float(sleep_file.readline().strip())
+    
+    # Read the sleep duration from the file
+    with open(CURRENT_SLEEP_PATH, "r") as sleep_file:
+        sleep_duration = float(sleep_file.readline().strip())
+        sleep_file.close()
+    print("sleep_duration: ", sleep_duration)
 
-        print("sleep_duration: ", sleep_duration)
+    # Read the URI from the current song file
+    with open(CURRENT_SONG_PATH, "r") as file:
+        # Read the first line of the file (the URI)
+        song_uri = file.readline()
+        # Read the last line of the file (the duration in seconds)
+        # Remove the new line at the end of the song URI since we read it in from a file
+        modified_uri = song_uri.rstrip('\n')
+        file.close()
+    print(modified_uri)
+    print([modified_uri])
 
-        # Read the URI from the current song file
-        with open(CURRENT_SONG_PATH, "r") as file:
-            # Read the first line of the file (the URI)
-            song_uri = file.readline()
-            # Read the last line of the file (the duration in seconds)
-            # Remove the new line at the end of the song URI since we read it in from a file
-            modified_uri = song_uri.rstrip('\n')
-
-            print(modified_uri)
-            print([modified_uri])
-        
+    if (modified_uri == ""):
+        print("current file has not been updated yet.\n")
+        sleep(15)
+    else:
         # Start playback with the retrieved URI
         sp.start_playback(device_id=DEVICE_ID, uris=[modified_uri])
 
@@ -122,6 +145,7 @@ while True:  # Infinite loop for continuous execution
         time_at_pause = 0
         paused_offset = 0
         command = readController()
+        
         while True:
             elapsed_time = time.time() - start_time
             
@@ -136,13 +160,23 @@ while True:  # Infinite loop for continuous execution
                 break
             elif (elapsed_time - paused_offset < sleep_duration and command == "pause"):
                 print("paused\n")
+                
+
+                # Update the control on the website to paused
+                # postControlToWebsite("pause")
+            
+                # Wait until play happens, otherwise we're still paused
                 time_at_pause = elapsed_time
                 time_paused = time.time()
                 sp.pause_playback(device_id = DEVICE_ID)
                 while command != "play":
                     command = readController()
+
                 # Restart playback at the correct time:
                 print("played")
+
+                # update the control on the website to play
+                # postControlToWebsite("play")
                 time_played = time.time()
                 paused_offset += time_played - time_paused
                 print("paused_offset: " , paused_offset)
@@ -162,10 +196,6 @@ while True:  # Infinite loop for continuous execution
 
         # Move the current song to the previous songs file
         print("song over, updating files\n")
-        sleep(2)
+        sleep(10)
         print("files should be updated, resuming playback with new song \n")
-        
-        
-
-    except Exception as ex:
-        print("An unexpected error occurred:", str(ex))
+ 
